@@ -1,0 +1,70 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class NotificationWindow {
+    private JFrame frame;
+    private JLabel titleLabel;
+    private JLabel messageLabel;
+    private JLabel iconLabel;
+    private JButton closeButton;
+
+    public NotificationWindow(String title, String message, ImageIcon icon) {
+        frame = new JFrame("Notification");
+        frame.setLayout(new BorderLayout(10, 10)); // Added padding between components
+        frame.setSize(300, 150);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Use DISPOSE_ON_CLOSE to close only the window
+
+        titleLabel = new JLabel(title, SwingConstants.CENTER); // Centered the text
+        messageLabel = new JLabel(message, SwingConstants.CENTER); // Centered the text
+        iconLabel = new JLabel(icon, SwingConstants.CENTER); // Centered the icon
+
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        closeButton = new JButton("Close");
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        });
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(titleLabel, BorderLayout.NORTH);
+        panel.add(messageLabel, BorderLayout.CENTER);
+        if (icon != null) {
+            panel.add(iconLabel, BorderLayout.WEST); // Add icon to the west side
+        }
+
+        frame.add(panel, BorderLayout.CENTER);
+        frame.add(closeButton, BorderLayout.SOUTH);
+
+        frame.setLocationRelativeTo(null); // Center the window
+    }
+
+    public void display() {
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ImageIcon icon = null;
+                try {
+                    icon = new ImageIcon("path/to/icon.png");
+                } catch (Exception e) {
+                    System.out.println("Icon not found or invalid path.");
+                }
+                NotificationWindow notification = new NotificationWindow(
+                    "Sample Title",
+                    "This is a sample message.",
+                    icon
+                );
+                notification.display();
+            }
+        });
+    }
+}
