@@ -1,0 +1,140 @@
+1.HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote of the Day</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Quote of the Day</h1>
+        <div class="quote-container">
+            <p id="quote">Loading...</p>
+            <button id="refresh">New Quote</button>
+            <button id="favorite">Add to Favorites</button>
+            <button id="share">Share Quote</button>
+        </div>
+        <h2>Favorites</h2>
+        <ul id="favorites-list"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+2.CSS
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    margin: 10px 0;
+}
+
+.quote-container {
+    margin: 20px 0;
+}
+
+#quote {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#favorites-list {
+    list-style: none;
+    padding: 0;
+}
+
+#favorites-list li {
+    margin: 5px 0;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+3.JAVASCRIPT
+
+const quotes = [
+    "The only way to do great work is to love what you do. – Steve Jobs",
+    "Success is not the key to happiness. Happiness is the key to success. – Albert Schweitzer",
+    "Don’t watch the clock; do what it does. Keep going. – Sam Levenson",
+    "Keep your face always toward the sunshine—and shadows will fall behind you. – Walt Whitman",
+    "The future belongs to those who believe in the beauty of their dreams. – Eleanor Roosevelt",
+    "You miss 100% of the shots you don’t take. – Wayne Gretzky"
+];
+
+const quoteElement = document.getElementById('quote');
+const refreshButton = document.getElementById('refresh');
+const favoriteButton = document.getElementById('favorite');
+const shareButton = document.getElementById('share');
+const favoritesList = document.getElementById('favorites-list');
+
+function getRandomQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    return quotes[randomIndex];
+}
+
+function displayQuote() {
+    quoteElement.textContent = getRandomQuote();
+}
+
+function addFavoriteQuote() {
+    const favoriteQuote = quoteElement.textContent;
+    const listItem = document.createElement('li');
+    listItem.textContent = favoriteQuote;
+    favoritesList.appendChild(listItem);
+}
+
+function shareQuote() {
+    const quote = quoteElement.textContent;
+    const shareText = `Check out this quote: "${quote}"`;
+    if (navigator.share) {
+        navigator.share({
+            title: 'Quote of the Day',
+            text: shareText
+        }).then(() => {
+            console.log('Quote shared successfully');
+        }).catch(console.error);
+    } else {
+        alert('Sharing not supported on this browser. Copy the quote manually: ' + quote);
+    }
+}
+
+refreshButton.addEventListener('click', displayQuote);
+favoriteButton.addEventListener('click', addFavoriteQuote);
+shareButton.addEventListener('click', shareQuote);
+
+// Display a new quote on page load
+window.onload = displayQuote;
